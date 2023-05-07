@@ -1,0 +1,198 @@
+.navWrapper {
+    transform: translateY(0);
+    opacity: 1;
+    height: 86px;
+    left: 0;
+    position: fixed;
+    top: 0;
+    transition-duration: .2s;
+    transition-property: background, top;
+    width: 100%;
+    z-index: 10;
+}
+
+.maxWFull {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 2560px;
+    position: relative;
+    width: 100%;
+    background: #fff;
+    box-shadow: 0 10px 10px hsla(0, 0%, 5%, .05);
+    color: #0d0d0d;
+}
+
+.maxWL {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: calc(-1.276595744680851px + 4.25531914893617vw);
+    padding-right: calc(-1.276595744680851px + 4.25531914893617vw);
+    width: 100%;
+}
+
+.columns {
+    height: 100%;
+}
+
+.left {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.center {
+    position: relative;
+    z-index: 1;
+}
+
+.navigation {
+    height: 86px;
+    position: relative;
+    z-index: 2;
+}
+
+.navItem {
+    margin-left: 9px;
+    margin-right: 9px;
+    height: 100%;
+    position: relative;
+}
+
+.link {
+    font-family: "Gellix", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+    font-size: calc(14.295774647887324px + .187793427230047vw);
+    font-weight: 500;
+    height: 100%;
+    letter-spacing: -.2px;
+    line-height: 1.1;
+    margin-bottom: calc(9.718309859154928px + 1.408450704225352vw);
+    margin-top: calc(9.718309859154928px + 1.408450704225352vw);
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.link:hover {
+    color: #6210CC;
+    font-weight: 700;
+}
+
+.right {
+    flex-basis: 0;
+    flex-grow: 1;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    margin-left: calc(8.873239436619716px + 5.633802816901409vw);
+}
+
+.signupLink {
+    background-color: transparent;
+    color: inherit;
+    cursor: pointer;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    font-weight: 500 !important;
+    color: #6210cc;
+    font-family: "Gellix", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+    font-size: calc(16px + 0vw);
+    font-weight: 700;
+    height: 30px;
+    margin: 0 15px 0 0;
+    padding: 0;
+    align-items: center;
+    color: #fff;
+    display: inline-flex;
+    font-family: "Gellix", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+    font-size: calc(12.295774647887324px + .187793427230047vw);
+    font-weight: 500;
+    justify-content: center;
+    letter-spacing: .5px;
+    letter-spacing: -.2px;
+    line-height: 1.1;
+    margin-bottom: calc(9.718309859154928px + 1.408450704225352vw);
+    margin-top: calc(9.718309859154928px + 1.408450704225352vw);
+    overflow: hidden;
+    position: relative;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    color: #0d0d0d;
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+.shape {
+    background: transparent;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: background .4s, transform .1s, box-shadow .2s;
+    width: 100%;
+}
+
+.slot {
+    margin-top: -1px;
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.slot::after {
+    content: "";
+    box-sizing: border-box;
+    background: #6210cc;
+    bottom: -5px;
+    height: 3.2px;
+    position: absolute;
+    transform: scaleX(0);
+    transform-origin: right;
+    width: 100%;
+    transition: all 0.3s linear;
+}
+
+.signupLink:hover .slot {
+    color: #6210CC;
+}
+
+.signupLink:hover .slot::after {
+    transform: scaleX(1);
+}
+
+.talkToSalesLink {
+    background-color: #6210CC;
+    cursor: pointer;
+    border-radius: 40px;
+    width: 153px;
+    height: 47px;
+    /* jjj */
+    align-items: center;
+    color: #fff;
+    display: inline-flex;
+    font-family: "Gellix", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+    font-size: calc(13.295774647887324px + .187793427230047vw);
+    font-weight: 500;
+    justify-content: center;
+    letter-spacing: .5px;
+    letter-spacing: -.2px;
+    line-height: 1.1;
+    margin-bottom: calc(9.718309859154928px + 1.408450704225352vw);
+    margin-top: calc(9.718309859154928px + 1.408450704225352vw);
+    overflow: hidden;
+    position: relative;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+}
+
+.talkToSalesLink:hover {
+    background-color: #4b11a1;
+}
+
+.talkToSalesLink .slot {
+    padding-left: 5px;
+    padding-right: 5px;
+}
