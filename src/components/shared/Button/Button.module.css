@@ -1,0 +1,67 @@
+.btnLink {
+    background-color: #6210CC;
+    cursor: pointer;
+    border-radius: 40px;
+    width: 153px;
+    height: 47px;
+    /* jjj */
+    align-items: center;
+    color: #fff;
+    display: inline-flex;
+    font-family: "Gellix", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+    font-size: calc(13.295774647887324px + .187793427230047vw);
+    font-weight: 500;
+    justify-content: center;
+    letter-spacing: .5px;
+    letter-spacing: -.2px;
+    line-height: 1.1;
+    margin-bottom: calc(9.718309859154928px + 1.408450704225352vw);
+    margin-top: calc(9.718309859154928px + 1.408450704225352vw);
+    overflow: hidden;
+    position: relative;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+}
+
+.shape {
+    background: transparent;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: background .4s, transform .1s, box-shadow .2s;
+    width: 100%;
+}
+
+.slot {
+    margin-top: -1px;
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.slot::after {
+    content: "";
+    box-sizing: border-box;
+    background: #6210cc;
+    bottom: -5px;
+    height: 3.2px;
+    position: absolute;
+    transform: scaleX(0);
+    transform-origin: right;
+    width: 100%;
+    transition: all 0.3s linear;
+}
+
+.btnLink:hover {
+    background-color: #4b11a1;
+}
+
+.btnLink .slot {
+    padding-left: 5px;
+    padding-right: 5px;
+}
