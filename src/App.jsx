@@ -13,6 +13,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import AuthForm from "./pages/AuthForms/AuthForm";
+import UserProfile from "./pages/UserProfile/UserProfile";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/authentication" element={<AuthForm />} />
+          <Route path="/profile" element={<UserProfile/>} />
         </Routes>
       </Router>
     </>
