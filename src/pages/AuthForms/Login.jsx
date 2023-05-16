@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import Input from "../../components/shared/Input/Input";
+import FuncButton from "../../components/shared/Button/FuncButton";
 
 const Login = ({ tabSelected }) => {
   const [loginInput, setLoginInput] = useState({
-    emailOrMobile: "",
+    usernameOrEmail: "",
     password: "",
   });
 
@@ -21,7 +22,7 @@ const Login = ({ tabSelected }) => {
     e.preventDefault();
     console.log(loginInput);
     setLoginInput({
-      emailOrMobile: "",
+      usernameOrEmail: "",
       password: "",
     });
   };
@@ -43,16 +44,16 @@ const Login = ({ tabSelected }) => {
         </div>
       </div>
       <p className="mt-2">-------- OR --------</p>
-      <form onSubmit={loginFormSubmitHandler}>
+      <div>
         <Input
           id="email"
-          label="Email or Mobile"
+          label="Username or Email"
           onChange={inputChangeHandler}
           input={{
             id: "email",
             type: "email",
-            name: "emailOrMobile",
-            value: loginInput.emailOrMobile,
+            name: "usernameOrEmail",
+            value: loginInput.usernameOrEmail,
             required: true,
           }}
         />
@@ -68,10 +69,8 @@ const Login = ({ tabSelected }) => {
             required: true,
           }}
         />
-        <button type="submit" className="btn btn-primary">
-          Login
-        </button>
-      </form>
+        <FuncButton onClick={loginFormSubmitHandler} label="Login" disableStatus={true} />
+      </div>
     </div>
   );
 };

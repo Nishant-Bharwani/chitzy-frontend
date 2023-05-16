@@ -1,15 +1,28 @@
 import { Icon } from "@iconify/react";
 import React, { useState } from "react";
 import Input from "../../components/shared/Input/Input";
-import Button from "../../components/shared/Button/Button";
+import FuncButton from "../../components/shared/Button/FuncButton";
 
 const Signup = ({ tabSelected }) => {
+  const [step, setStep] = useState(1);
+  const [usernameActive, setUsernameActive] = useState(false);
+  const [imageUploadActive, setImageUploadActive] = useState(false);
+
+  const nextStep = () => {
+    setStep(step + 1);
+  };
+  const prevStep = () => {
+    setStep(step - 1);
+  };
   const [signUpInput, setSignupInput] = useState({
     name: "",
     email: "",
     phone: "",
     password: "",
-    confirmPassword: "",
+    otp: "",
+    username: "",
+    profilePic: "",
+    // confirmPassword: "",
   });
 
   const inputChangeHandler = (e) => {
@@ -21,8 +34,29 @@ const Signup = ({ tabSelected }) => {
     });
   };
 
+  const verifyOtp = () => {
+    console.log("OTP Verified!");
+    setImageUploadActive(true);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+    setSignupInput((prev) => {
+      return {
+        ...prev,
+        profilePic: url,
+      };
+    });
+  };
+
+  const imageUploadHandler = () => {
+    console.log(URL.createObjectURL(signUpInput.profilePic));
+    console.log("Image Successfully Uploaded");
+    setUsernameActive(true);
+  };
+
   const signUpFormSubmitHandler = (e) => {
-    e.preventDefault();
     console.log(signUpInput);
 
     setSignupInput({
@@ -30,13 +64,174 @@ const Signup = ({ tabSelected }) => {
       email: "",
       phone: "",
       password: "",
-      confirmPassword: "",
+      otp: "",
+      username: "",
+      profilePic: "",
+      // confirmPassword: "",
     });
+  };
+
+  const signupFormData = (key) => {
+    switch (key) {
+      case 1:
+        return (
+          <div className="d-flex justify-center gap-3 align-items-center">
+            <div className="w-50">
+              <Input
+                id="name"
+                label="Name"
+                onChange={inputChangeHandler}
+                input={{
+                  id: "name",
+                  type: "text",
+                  name: "name",
+                  value: signUpInput.name,
+                }}
+              />
+              <Input
+                id="email"
+                label="Email"
+                onChange={inputChangeHandler}
+                input={{
+                  id: "email",
+                  type: "email",
+                  name: "email",
+                  value: signUpInput.email,
+                }}
+              />
+              <Input
+                id="phone"
+                label="Phone Number"
+                onChange={inputChangeHandler}
+                input={{
+                  id: "phone",
+                  type: "number",
+                  name: "phone",
+                  value: signUpInput.phone,
+                }}
+              />
+              <Input
+                id="password"
+                label="Password"
+                onChange={inputChangeHandler}
+                input={{
+                  id: "password",
+                  type: "password",
+                  name: "password",
+                  value: signUpInput.password,
+                }}
+              />
+              <Input
+                id="confirmPassword"
+                label="Confirm Password"
+                onChange={inputChangeHandler}
+                input={{
+                  id: "confirmPassword",
+                  type: "password",
+                  name: "confirmPassword",
+                  value: signUpInput.confirmPassword,
+                }}
+              />
+              <FuncButton
+                disableStatus={true}
+                onClick={() => nextStep()}
+                label="Verify Email"
+              />
+            </div>
+            <div
+              className="w-50 p-3 border rounded-1"
+              style={{
+                backgroundColor: "ButtonShadow",
+                color: "GrayText",
+              }}
+            >
+              Username Example: john123 or john_123 .
+              <ul>
+                <li>Should start with a lowercase letter from (a-z)</li>
+                <li>Must be between 4 to 14 characters long</li>
+                <li>Must end with a letter (a-z) or number (0-9)</li>
+                <li>
+                  Must not contain a sequence of two or more underscores (_)
+                </li>
+                <li>
+                  Can contain lowercase letters from (a-z), digits or
+                  underscores
+                </li>
+                <li>
+                  Please do not keep an explicit or inappropriate name/username.
+                  It may lead to suspension of your account.
+                </li>
+              </ul>
+              Note: Choose wisely your username, for you will not be able to
+              change it later.
+            </div>
+          </div>
+        );
+      case 2:
+        return (
+          <div>
+            <div className="d-flex justify-center gap-3 align-items-center">
+              <div className="w-50">
+                <div>
+                  <Input
+                    id="otp"
+                    label="Enter OTP"
+                    onChange={inputChangeHandler}
+                    input={{
+                      id: "otp",
+                      type: "number",
+                      name: "otp",
+                      value: signUpInput.otp,
+                    }}
+                  />
+                  <FuncButton
+                    disableStatus={true}
+                    onClick={verifyOtp}
+                    label="Verify"
+                  />
+                </div>
+                <Input
+                  id="username"
+                  label="Username"
+                  onChange={inputChangeHandler}
+                  input={{
+                    id: "username",
+                    type: "text",
+                    name: "username",
+                    value: signUpInput.username,
+                    disabled: usernameActive ? "" : "disabled",
+                  }}
+                />
+              </div>
+              <div>
+                <img width="100px" height="100px" style={{borderRadius:"100%"}} src={signUpInput.profilePic} alt="ProfileImage" />
+                <input
+                  type="file"
+                  name="profilePic"
+                  onChange={handleFileChange}
+                />
+                <FuncButton
+                  disableStatus={imageUploadActive}
+                  onClick={imageUploadHandler}
+                  label="Upload Image"
+                />
+              </div>
+            </div>
+            <FuncButton
+              onClick={signUpFormSubmitHandler}
+              disableStatus={usernameActive}
+              label="Register"
+            />
+          </div>
+        );
+      default:
+        return <div></div>;
+    }
   };
 
   return (
     <div
-      //   style={{ background: tabSelected === 1 && "#b39ddb" }}
+      //style={{ background: tabSelected === 1 && "#b39ddb" }}
       style={{ border: "1px solid #6210CC" }}
       className="p-5 m-auto"
     >
@@ -52,92 +247,7 @@ const Signup = ({ tabSelected }) => {
       </div>
 
       <p className="mt-2">--------- OR --------</p>
-
-      <div className="d-flex justify-center gap-3 align-items-center">
-        <form className="w-50" onSubmit={signUpFormSubmitHandler}>
-          <Input
-            id="name"
-            label="Name"
-            onChange={inputChangeHandler}
-            input={{
-              id: "name",
-              type: "text",
-              name: "name",
-              value: signUpInput.name,
-            }}
-          />
-          <Input
-            id="email"
-            label="Email"
-            onChange={inputChangeHandler}
-            input={{
-              id: "email",
-              type: "email",
-              name: "email",
-              value: signUpInput.email,
-            }}
-          />
-          <Input
-            id="phone"
-            label="Phone Number"
-            onChange={inputChangeHandler}
-            input={{
-              id: "phone",
-              type: "number",
-              name: "phone",
-              value: signUpInput.phone,
-            }}
-          />
-          <Input
-            id="password"
-            label="Password"
-            onChange={inputChangeHandler}
-            input={{
-              id: "password",
-              type: "password",
-              name: "password",
-              value: signUpInput.password,
-            }}
-          />
-          <Input
-            id="confirmPassword"
-            label="Confirm Password"
-            onChange={inputChangeHandler}
-            input={{
-              id: "confirmPassword",
-              type: "password",
-              name: "confirmPassword",
-              value: signUpInput.confirmPassword,
-            }}
-          />
-          <button type="submit" className="btn btn-primary">
-            Register
-          </button>
-        </form>
-        <div
-          className="w-50 p-3 border rounded-1"
-          style={{
-            backgroundColor: "ButtonShadow", color:"GrayText",
-          }}
-        >
-          Username Example: john123 or john_123 .
-          <ul>
-            <li>Should start with a lowercase letter from (a-z)</li>
-            <li>Must be between 4 to 14 characters long</li>
-            <li>Must end with a letter (a-z) or number (0-9)</li>
-            <li>Must not contain a sequence of two or more underscores (_)</li>
-            <li>
-              Can contain lowercase letters from (a-z), digits or underscores
-            </li>
-            <li>
-              Please do not keep an explicit or inappropriate name/username. It
-              may lead to suspension of your account.
-            </li>
-          </ul>
-          Note: Choose wisely your username, for you will not be able to change
-          it later.
-        </div>
-      </div>
+      {signupFormData(step)}
     </div>
   );
 };

@@ -1,0 +1,29 @@
+.funcButtonWrapper {
+  background-color: #6210cc;
+  cursor: pointer;
+  border-radius: 40px;
+  width: 153px;
+  height: 47px;
+  /* jjj */
+  align-items: center;
+  color: #fff;
+  display: inline-flex;
+  font-family: "Gellix", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+    Cantarell, Noto Sans, sans-serif;
+  font-size: calc(13.295774647887324px + 0.187793427230047vw);
+  font-weight: 500;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  letter-spacing: -0.2px;
+  line-height: 1.1;
+  margin-bottom: calc(9.718309859154928px + 1.408450704225352vw);
+  margin-top: calc(0.718309859154928px + 0.408450704225352vw);
+  overflow: hidden;
+  position: relative;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+.disabledButton {
+  background-color: lightslategray;
+  cursor: not-allowed;
+}
