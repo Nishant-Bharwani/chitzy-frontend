@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import AuthForm from "../../../pages/AuthForms/AuthForm";
 import Button from "../Button/Button";
 import styles from "./Navbar.module.css";
-import AuthForm from "../../../pages/AuthForms/AuthForm";
 
 const Navbar1 = () => {
   const [isNavbarExpanded, setIsNavbarExpanded] = useState(false);
@@ -129,9 +129,8 @@ const Navbar1 = () => {
                 onClick={handleNavbarExpansion}
               >
                 <div
-                  className={`cursor-pointer ${styles.hamburger} ${
-                    isNavbarExpanded ? styles.open : ""
-                  }`}
+                  className={`cursor-pointer ${styles.hamburger} ${isNavbarExpanded ? styles.open : ""
+                    }`}
                 >
                   <div className={`cursor-pointer ${styles.bars}`}>
                     <div className={`${styles.bar}`}></div>
