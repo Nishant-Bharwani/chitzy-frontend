@@ -2,11 +2,14 @@ import { Icon } from "@iconify/react";
 import React, { useState } from "react";
 import Input from "../../components/shared/Input/Input";
 import FuncButton from "../../components/shared/Button/FuncButton";
+import { registerUser, sendOtp, verifyOtp } from "../../http";
 
 const Signup = ({ tabSelected }) => {
   const [step, setStep] = useState(1);
   const [usernameActive, setUsernameActive] = useState(false);
   const [imageUploadActive, setImageUploadActive] = useState(false);
+  const [otpData, setOtpData] = useState({});
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const nextStep = () => {
     setStep(step + 1);
@@ -19,10 +22,8 @@ const Signup = ({ tabSelected }) => {
     email: "",
     phone: "",
     password: "",
-    otp: "",
     username: "",
     profilePic: "",
-    // confirmPassword: "",
   });
 
   const inputChangeHandler = (e) => {
@@ -34,7 +35,34 @@ const Signup = ({ tabSelected }) => {
     });
   };
 
-  const verifyOtp = () => {
+  const confirmPasswordChangeHandler = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+
+  const otpChangeHandler = (e) => {
+    setOtpData(e.target.value);
+  };
+
+  const sendOtpHandler = () => {
+    try {
+      sendOtp({ email: signUpInput.email }).then((res) => {
+        console.log(res.data);
+        setOtpData(res.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    nextStep();
+  };
+
+  const verifyOtpHandler = () => {
+    try {
+      verifyOtp(otpData)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    } catch (error) {
+      console.log(error);
+    }
     console.log("OTP Verified!");
     setImageUploadActive(true);
   };
@@ -51,23 +79,25 @@ const Signup = ({ tabSelected }) => {
   };
 
   const imageUploadHandler = () => {
-    console.log(URL.createObjectURL(signUpInput.profilePic));
     console.log("Image Successfully Uploaded");
     setUsernameActive(true);
   };
 
   const signUpFormSubmitHandler = (e) => {
     console.log(signUpInput);
-
+    try {
+      registerUser(signUpInput).then((res) => console.log(res));
+    } catch (error) {
+      console.log(error);
+    }
+    console.log("Register API successfully integrated");
     setSignupInput({
       name: "",
       email: "",
       phone: "",
       password: "",
-      otp: "",
       username: "",
       profilePic: "",
-      // confirmPassword: "",
     });
   };
 
@@ -124,17 +154,17 @@ const Signup = ({ tabSelected }) => {
               <Input
                 id="confirmPassword"
                 label="Confirm Password"
-                onChange={inputChangeHandler}
+                onChange={confirmPasswordChangeHandler}
                 input={{
                   id: "confirmPassword",
                   type: "password",
                   name: "confirmPassword",
-                  value: signUpInput.confirmPassword,
+                  value: confirmPassword,
                 }}
               />
               <FuncButton
                 disableStatus={true}
-                onClick={() => nextStep()}
+                onClick={sendOtpHandler}
                 label="Verify Email"
               />
             </div>
@@ -176,17 +206,17 @@ const Signup = ({ tabSelected }) => {
                   <Input
                     id="otp"
                     label="Enter OTP"
-                    onChange={inputChangeHandler}
+                    onChange={otpChangeHandler}
                     input={{
                       id: "otp",
                       type: "number",
                       name: "otp",
-                      value: signUpInput.otp,
+                      value: otpData.otp,
                     }}
                   />
                   <FuncButton
                     disableStatus={true}
-                    onClick={verifyOtp}
+                    onClick={verifyOtpHandler}
                     label="Verify"
                   />
                 </div>
@@ -204,7 +234,13 @@ const Signup = ({ tabSelected }) => {
                 />
               </div>
               <div>
-                <img width="100px" height="100px" style={{borderRadius:"100%"}} src={signUpInput.profilePic} alt="ProfileImage" />
+                <img
+                  width="100px"
+                  height="100px"
+                  style={{ borderRadius: "100%" }}
+                  src={signUpInput.profilePic}
+                  alt="ProfileImage"
+                />
                 <input
                   type="file"
                   name="profilePic"

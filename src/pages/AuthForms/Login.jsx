@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import Input from "../../components/shared/Input/Input";
 import FuncButton from "../../components/shared/Button/FuncButton";
+import { login } from "../../http";
 
 const Login = ({ tabSelected }) => {
   const [loginInput, setLoginInput] = useState({
@@ -21,6 +22,11 @@ const Login = ({ tabSelected }) => {
   const loginFormSubmitHandler = (e) => {
     e.preventDefault();
     console.log(loginInput);
+    try {
+      login(loginInput).then((res) => res);
+    } catch (error) {
+      console.log(error);
+    }
     setLoginInput({
       usernameOrEmail: "",
       password: "",
@@ -69,7 +75,11 @@ const Login = ({ tabSelected }) => {
             required: true,
           }}
         />
-        <FuncButton onClick={loginFormSubmitHandler} label="Login" disableStatus={true} />
+        <FuncButton
+          onClick={loginFormSubmitHandler}
+          label="Login"
+          disableStatus={true}
+        />
       </div>
     </div>
   );
