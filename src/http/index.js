@@ -20,32 +20,32 @@ export const updateProfile = (data) =>
   api.post(`api/user/profile/update`, data);
 
 // Interceptors
-api.interceptors.response.use(
-  (config) => {
-    return config;
-  },
-  async (error) => {
-    const orignalRequest = error.config;
+// api.interceptors.response.use(
+//   (config) => {
+//     return config;
+//   },
+//   async (error) => {
+//     const orignalRequest = error.config;
 
-    if (
-      error.response.status === 401 &&
-      orignalRequest &&
-      !orignalRequest.isRetry
-    ) {
-      orignalRequest.isRetry = true;
-      try {
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/refresh`, {
-          withCredentials: true,
-        });
+//     if (
+//       error.response.status === 401 &&
+//       orignalRequest &&
+//       !orignalRequest.isRetry
+//     ) {
+//       orignalRequest.isRetry = true;
+//       try {
+//         await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/refresh`, {
+//           withCredentials: true,
+//         });
 
-        return api.request(orignalRequest);
-      } catch (err) {
-        console.log(err.message);
-      }
-    }
+//         return api.request(orignalRequest);
+//       } catch (err) {
+//         console.log(err.message);
+//       }
+//     }
 
-    throw error;
-  }
-);
+//     throw error;
+//   }
+// );
 
 export default api;

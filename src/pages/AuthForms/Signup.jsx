@@ -1,8 +1,10 @@
 import { Icon } from "@iconify/react";
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Input from "../../components/shared/Input/Input";
 import FuncButton from "../../components/shared/Button/FuncButton";
 import { registerUser, sendOtp, verifyOtp } from "../../http";
+import { addUser } from "../../store/store";
 
 const Signup = ({ tabSelected }) => {
   const [step, setStep] = useState(1);
@@ -10,6 +12,8 @@ const Signup = ({ tabSelected }) => {
   const [imageUploadActive, setImageUploadActive] = useState(false);
   const [otpData, setOtpData] = useState({});
   const [confirmPassword, setConfirmPassword] = useState("");
+  const registeredUserState = useSelector((store) => store);
+  const dispatch = useDispatch();
 
   const nextStep = () => {
     setStep(step + 1);
@@ -45,26 +49,30 @@ const Signup = ({ tabSelected }) => {
 
   const sendOtpHandler = () => {
     try {
+      console.log({ email: signUpInput.email });
       sendOtp({ email: signUpInput.email }).then((res) => {
         console.log(res.data);
         setOtpData(res.data);
+        nextStep();
       });
     } catch (error) {
       console.log(error);
     }
-    nextStep();
   };
 
   const verifyOtpHandler = () => {
     try {
       verifyOtp(otpData)
-        .then((res) => console.log(res))
+        .then((res) => {
+          if (res.status === 200) {
+            setImageUploadActive(true);
+            console.log(res.data);
+          } else console.log("OTP Verification failed!");
+        })
         .catch((err) => console.log(err));
     } catch (error) {
       console.log(error);
     }
-    console.log("OTP Verified!");
-    setImageUploadActive(true);
   };
 
   const handleFileChange = (e) => {
@@ -86,11 +94,15 @@ const Signup = ({ tabSelected }) => {
   const signUpFormSubmitHandler = (e) => {
     console.log(signUpInput);
     try {
-      registerUser(signUpInput).then((res) => console.log(res));
+      registerUser(signUpInput).then((res) => {
+        console.log(res);
+        console.log("Register API successfully integrated");
+        dispatch(addUser(signUpInput));
+      });
     } catch (error) {
       console.log(error);
     }
-    console.log("Register API successfully integrated");
+
     setSignupInput({
       name: "",
       email: "",
