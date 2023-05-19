@@ -81,7 +81,7 @@ const Signup = ({ tabSelected }) => {
     setSignupInput((prev) => {
       return {
         ...prev,
-        profilePic: url,
+        profilePic: file,
       };
     });
   };
@@ -94,11 +94,14 @@ const Signup = ({ tabSelected }) => {
   const signUpFormSubmitHandler = (e) => {
     console.log(signUpInput);
     try {
-      registerUser(signUpInput).then((res) => {
-        console.log(res);
-        console.log("Register API successfully integrated");
-        dispatch(addUser(signUpInput));
-      });
+
+      registerUser({
+        name: signUpInput.name,
+        email: signUpInput.email,
+        phone: signUpInput.phone,
+        password: signUpInput.password,
+        username: signUpInput.username
+      }, signUpInput.profilePic).then((res) => console.log(res));
     } catch (error) {
       console.log(error);
     }
@@ -256,6 +259,7 @@ const Signup = ({ tabSelected }) => {
                 <input
                   type="file"
                   name="profilePic"
+                  accept="image/*"
                   onChange={handleFileChange}
                 />
                 <FuncButton

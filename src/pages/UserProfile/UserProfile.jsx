@@ -4,7 +4,7 @@ import bioIcon from "@iconify/icons-mdi/notebook";
 import pencilIcon from "@iconify/icons-mdi/pencil";
 import phoneIcon from "@iconify/icons-mdi/phone";
 import { Icon } from "@iconify/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Avatar from "../../components/shared/PremiumButton/Avatar.jsx";
 import PremiumButton from "../../components/shared/PremiumButton/PremiumButton.jsx";
 import "./UserProfile.css";

@@ -1,8 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import "./Landing.css";
 import Button from "../../components/shared/Button/Button";
 import Features from "../../components/shared/Features/Features";
+import "./Landing.css";
 // import Feature1 from "../shared/Features/Features";
 // import Feature2 from "../shared/Features/Features";
 const Landing = () => {
