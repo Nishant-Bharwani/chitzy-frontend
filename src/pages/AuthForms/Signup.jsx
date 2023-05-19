@@ -5,6 +5,8 @@ import Input from "../../components/shared/Input/Input";
 import FuncButton from "../../components/shared/Button/FuncButton";
 import { registerUser, sendOtp, verifyOtp } from "../../http";
 import { addUser } from "../../store/store";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Signup = ({ tabSelected }) => {
   const [step, setStep] = useState(1);
@@ -12,8 +14,18 @@ const Signup = ({ tabSelected }) => {
   const [imageUploadActive, setImageUploadActive] = useState(false);
   const [otpData, setOtpData] = useState({});
   const [confirmPassword, setConfirmPassword] = useState("");
-  const registeredUserState = useSelector((store) => store);
+  const [confirmPassErr, setConfrimPassErr] = useState("");
+  const [passErr, setPassErr] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [signUpInput, setSignupInput] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    username: "",
+    profilePic: null,
+  });
 
   const nextStep = () => {
     setStep(step + 1);
@@ -21,14 +33,6 @@ const Signup = ({ tabSelected }) => {
   const prevStep = () => {
     setStep(step - 1);
   };
-  const [signUpInput, setSignupInput] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    username: "",
-    profilePic: "",
-  });
 
   const inputChangeHandler = (e) => {
     setSignupInput((prev) => {
@@ -43,31 +47,84 @@ const Signup = ({ tabSelected }) => {
     setConfirmPassword(e.target.value);
   };
 
+  const handleValidation = (evnt) => {
+    const passwordInputValue = evnt.target.value.trim();
+    const passwordInputFieldName = evnt.target.name;
+    if (passwordInputFieldName === "password") {
+      const uppercaseRegExp = /(?=.*?[A-Z])/;
+      const lowercaseRegExp = /(?=.*?[a-z])/;
+      const digitsRegExp = /(?=.*?[0-9])/;
+      const specialCharRegExp = /(?=.*?[#?!@$%^&*-])/;
+      const minLengthRegExp = /.{8,}/;
+      const passwordLength = passwordInputValue.length;
+      const uppercasePassword = uppercaseRegExp.test(passwordInputValue);
+      const lowercasePassword = lowercaseRegExp.test(passwordInputValue);
+      const digitsPassword = digitsRegExp.test(passwordInputValue);
+      const specialCharPassword = specialCharRegExp.test(passwordInputValue);
+      const minLengthPassword = minLengthRegExp.test(passwordInputValue);
+      let errMsg = "";
+      if (passwordLength === 0) {
+        errMsg = "Password is empty";
+      } else if (!uppercasePassword) {
+        errMsg = "At least one Uppercase";
+      } else if (!lowercasePassword) {
+        errMsg = "At least one Lowercase";
+      } else if (!digitsPassword) {
+        errMsg = "At least one digit";
+      } else if (!specialCharPassword) {
+        errMsg = "At least one Special Characters";
+      } else if (!minLengthPassword) {
+        errMsg = "At least minumum 8 characters";
+      } else {
+        errMsg = "";
+      }
+      setPassErr(errMsg);
+    }
+    if (
+      passwordInputFieldName === "confirmPassword" ||
+      (passwordInputFieldName === "password" && confirmPassword.length > 0)
+    ) {
+      if (confirmPassword !== signUpInput.password) {
+        setConfrimPassErr("Confirm password is not matched");
+      } else {
+        setConfrimPassErr("");
+      }
+    }
+  };
+
   const otpChangeHandler = (e) => {
     setOtpData(e.target.value);
   };
 
-  const sendOtpHandler = () => {
+  const sendOtpHandler = async () => {
     try {
-      console.log({ email: signUpInput.email });
-      sendOtp({ email: signUpInput.email }).then((res) => {
-        console.log(res.data);
-        setOtpData(res.data);
-        nextStep();
-      });
+      if (passErr.trim().length === 0 && confirmPassErr.trim().length === 0) {
+        await sendOtp({ email: signUpInput.email }).then((res) => {
+          console.log(res.data);
+          setOtpData(res.data);
+          nextStep();
+        });
+      } else {
+        setStep((prev) => prev);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const verifyOtpHandler = () => {
+  const verifyOtpHandler = async () => {
     try {
-      verifyOtp(otpData)
+      await verifyOtp(otpData)
         .then((res) => {
           if (res.status === 200) {
             setImageUploadActive(true);
             console.log(res.data);
-          } else console.log("OTP Verification failed!");
+            toast.success(res.data.message);
+          } else {
+            toast.failure(`Email Verification Failed!`, {
+              theme: "dark",
+            });
+          }
         })
         .catch((err) => console.log(err));
     } catch (error) {
@@ -77,7 +134,7 @@ const Signup = ({ tabSelected }) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    const url = URL.createObjectURL(file);
+    console.log(file);
     setSignupInput((prev) => {
       return {
         ...prev,
@@ -87,33 +144,46 @@ const Signup = ({ tabSelected }) => {
   };
 
   const imageUploadHandler = () => {
-    console.log("Image Successfully Uploaded");
-    setUsernameActive(true);
+    if (
+      signUpInput.profilePic !== null &&
+      signUpInput.profilePic !== "https://picsum.photos/200/300    "
+    ) {
+      toast.success("Image Successfully Uploaded");
+      setUsernameActive(true);
+    } else {
+      toast.failure("Upload Again!");
+      setUsernameActive(false);
+    }
   };
 
-  const signUpFormSubmitHandler = (e) => {
-    console.log(signUpInput);
+  const signUpFormSubmitHandler = async (e) => {
     try {
-
-      registerUser({
-        name: signUpInput.name,
-        email: signUpInput.email,
-        phone: signUpInput.phone,
-        password: signUpInput.password,
-        username: signUpInput.username
-      }, signUpInput.profilePic).then((res) => console.log(res));
+      await registerUser(
+        {
+          name: signUpInput.name,
+          email: signUpInput.email,
+          phone: signUpInput.phone,
+          password: signUpInput.password,
+          username: signUpInput.username,
+        },
+        signUpInput.profilePic
+      ).then((res) => {
+        console.log(res.data.user);
+        dispatch(addUser(res.data.user));
+        navigate(`/${res.data.user._id}`);
+      });
     } catch (error) {
       console.log(error);
     }
 
-    setSignupInput({
-      name: "",
-      email: "",
-      phone: "",
-      password: "",
-      username: "",
-      profilePic: "",
-    });
+    // setSignupInput({
+    //   name: "",
+    //   email: "",
+    //   phone: "",
+    //   password: "",
+    //   username: "",
+    //   profilePic: null,
+    // });
   };
 
   const signupFormData = (key) => {
@@ -159,6 +229,7 @@ const Signup = ({ tabSelected }) => {
                 id="password"
                 label="Password"
                 onChange={inputChangeHandler}
+                onKeyUp={handleValidation}
                 input={{
                   id: "password",
                   type: "password",
@@ -166,10 +237,12 @@ const Signup = ({ tabSelected }) => {
                   value: signUpInput.password,
                 }}
               />
+              <p className="text-danger">{passErr}</p>
               <Input
                 id="confirmPassword"
                 label="Confirm Password"
                 onChange={confirmPasswordChangeHandler}
+                onKeyUp={handleValidation}
                 input={{
                   id: "confirmPassword",
                   type: "password",
@@ -177,6 +250,7 @@ const Signup = ({ tabSelected }) => {
                   value: confirmPassword,
                 }}
               />
+              <p className="text-danger">{confirmPassErr}</p>
               <FuncButton
                 disableStatus={true}
                 onClick={sendOtpHandler}
@@ -190,25 +264,16 @@ const Signup = ({ tabSelected }) => {
                 color: "GrayText",
               }}
             >
-              Username Example: john123 or john_123 .
               <ul>
-                <li>Should start with a lowercase letter from (a-z)</li>
-                <li>Must be between 4 to 14 characters long</li>
-                <li>Must end with a letter (a-z) or number (0-9)</li>
+                <li>Password field should not be empty</li>
                 <li>
-                  Must not contain a sequence of two or more underscores (_)
+                  Password must contain one uppercase and one lowercase letter
                 </li>
                 <li>
-                  Can contain lowercase letters from (a-z), digits or
-                  underscores
+                  Must contain a special character like (#,$,&,_) or digit (0-9)
                 </li>
-                <li>
-                  Please do not keep an explicit or inappropriate name/username.
-                  It may lead to suspension of your account.
-                </li>
+                <li>The lenth must be minimum 8 characters.</li>
               </ul>
-              Note: Choose wisely your username, for you will not be able to
-              change it later.
             </div>
           </div>
         );
@@ -253,7 +318,11 @@ const Signup = ({ tabSelected }) => {
                   width="100px"
                   height="100px"
                   style={{ borderRadius: "100%" }}
-                  src={signUpInput.profilePic}
+                  src={
+                    signUpInput.profilePic !== null
+                      ? URL.createObjectURL(signUpInput.profilePic)
+                      : "https://picsum.photos/200/300"
+                  }
                   alt="ProfileImage"
                 />
                 <input

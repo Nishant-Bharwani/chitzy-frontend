@@ -4,10 +4,11 @@ import bioIcon from "@iconify/icons-mdi/notebook";
 import pencilIcon from "@iconify/icons-mdi/pencil";
 import phoneIcon from "@iconify/icons-mdi/phone";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "../../components/shared/PremiumButton/Avatar.jsx";
 import PremiumButton from "../../components/shared/PremiumButton/PremiumButton.jsx";
 import "./UserProfile.css";
+import { useSelector } from "react-redux";
 
 const UserProfile = () => {
   const [user, setUser] = useState({});
@@ -15,11 +16,14 @@ const UserProfile = () => {
   const [editableBioField, setEditableBioField] = useState(false);
   const [editableNameField, setEditableNameField] = useState(false);
   const [editableUsernameField, setEditableUsernameField] = useState(false);
+  const registeredUserState = useSelector((store) => store.registeredUserReducer.user);
 
   const handleInputChange = (event, fieldName) => {
     setUser({ ...user, [fieldName]: event.target.value });
   };
-
+  useEffect(() => {
+    console.log(registeredUserState);
+  }, []);
   const handleEditClick = (fieldName) => {
     if (fieldName === "bio") {
       setEditableBioField(true);
@@ -59,8 +63,6 @@ const UserProfile = () => {
     e.preventDefault();
     handleSaveClick();
   };
-
-
 
   return (
     <form className="editUser" onSubmit={handleSubmit}>
@@ -128,22 +130,14 @@ const UserProfile = () => {
           <Icon icon={emailIcon} className="icon email-icon" />
           <label className="label">Email</label>
           <div className="input-container">
-            <input
-              type="text"
-              value={user.email}
-              disabled
-            />
+            <input type="text" value={user.email} disabled />
           </div>
         </div>
         <div className="input-wrapper">
           <Icon icon={phoneIcon} className="icon phone-icon" />
           <label className="label">Phone Number</label>
           <div className="input-container">
-            <input
-              type="text"
-              value={user.phone}
-              disabled
-            />
+            <input type="text" value={user.phone} disabled />
           </div>
         </div>
       </div>
@@ -154,7 +148,6 @@ const UserProfile = () => {
         </button>
       </div>
     </form>
-
   );
 };
 

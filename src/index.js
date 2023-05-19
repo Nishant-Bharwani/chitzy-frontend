@@ -5,7 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { Provider } from "react-redux";
-import store from "./store/store";
+import { persistor, store } from "./store/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const theme = createTheme({
@@ -17,11 +18,13 @@ const theme = createTheme({
 });
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </Provider>
+    <PersistGate loading={null} persistor={persistor}>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </Provider>
+    </PersistGate>
   </React.StrictMode>
 );
 

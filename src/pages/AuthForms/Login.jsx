@@ -3,8 +3,13 @@ import { Icon } from "@iconify/react";
 import Input from "../../components/shared/Input/Input";
 import FuncButton from "../../components/shared/Button/FuncButton";
 import { login } from "../../http";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addUser } from "../../store/store";
 
 const Login = ({ tabSelected }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [loginInput, setLoginInput] = useState({
     usernameOrEmail: "",
     password: "",
@@ -19,11 +24,14 @@ const Login = ({ tabSelected }) => {
     });
   };
 
-  const loginFormSubmitHandler = (e) => {
+  const loginFormSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(loginInput);
     try {
-      login(loginInput).then((res) => res);
+      await login(loginInput).then((res) => {
+        console.log(res);
+        dispatch(addUser(res.data));
+        navigate(`/${res.data._id}`);
+      });
     } catch (error) {
       console.log(error);
     }

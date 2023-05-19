@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
-import './PremiumButton.css'
+import React, { useState } from "react";
+import "./PremiumButton.css";
+import { useSelector } from "react-redux";
 
 const Avatar = () => {
-  const [status, setStatus] = useState('Online');
+  const [status, setStatus] = useState("Online");
+  const registeredUserState = useSelector(
+    (store) => store.registeredUserReducer.user
+  );
 
   // Update the user status based on user activity
   function updateUserStatus() {
@@ -10,7 +14,7 @@ const Avatar = () => {
     const seconds = now.getSeconds();
 
     if (seconds % 2 === 0) {
-      setStatus('Online');
+      setStatus("Online");
     } else {
       setStatus(`Last seen ${now.toLocaleTimeString()}`);
     }
@@ -19,12 +23,11 @@ const Avatar = () => {
   // Call updateUserStatus every 50 second
   setInterval(updateUserStatus, 50000);
 
-
   //
   return (
     <div className="avatar-container">
       <img
-        src="https://via.placeholder.com/150"
+        src={registeredUserState.profilePic}
         alt="Avatar"
         className="avatar"
       />
@@ -32,6 +35,6 @@ const Avatar = () => {
       <div className="status">{status}</div>
     </div>
   );
-}
+};
 
-export default Avatar
+export default Avatar;
