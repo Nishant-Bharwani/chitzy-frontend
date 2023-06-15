@@ -1,14 +1,24 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import AuthForm from "../../../pages/AuthForms/AuthForm";
 import Button from "../Button/Button";
 import styles from "./Navbar.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import { removeUser } from "../../../store/store";
 
 const Navbar1 = () => {
   const [isNavbarExpanded, setIsNavbarExpanded] = useState(false);
+  const dispatch = useDispatch();
+  const naviagte = useNavigate();
+  const currState = useSelector((store) => store.registeredUserReducer);
 
   const handleNavbarExpansion = () => {
     setIsNavbarExpanded(!isNavbarExpanded);
+  };
+
+  const logoutHandler = () => {
+    dispatch(removeUser());
+    naviagte("authentication");
   };
 
   return (
@@ -72,14 +82,31 @@ const Navbar1 = () => {
             <div
               className={`d-flex flex-grow-1 align-items-center justify-content-end flex-grow-1 ${styles.right}`}
             >
-              <Link to="authentication" className={`${styles.signupLink} me-2`}>
-                <span className={`${styles.shape}`}></span>
-                <span
-                  className={`d-flex align-items-center justify-content-center ${styles.slot}`}
+              {currState.isLoggedIn ? (
+                <button
+                  onClick={logoutHandler}
+                  className={`${styles.signupLink} me-2`}
                 >
-                  Login
-                </span>
-              </Link>
+                  <span className={`${styles.shape}`}></span>
+                  <span
+                    className={`d-flex align-items-center justify-content-center ${styles.slot}`}
+                  >
+                    Logout
+                  </span>
+                </button>
+              ) : (
+                <Link
+                  to="authentication"
+                  className={`${styles.signupLink} me-2`}
+                >
+                  <span className={`${styles.shape}`}></span>
+                  <span
+                    className={`d-flex align-items-center justify-content-center ${styles.slot}`}
+                  >
+                    Login
+                  </span>
+                </Link>
+              )}
 
               <Button text="Get Started" />
             </div>
@@ -129,8 +156,9 @@ const Navbar1 = () => {
                 onClick={handleNavbarExpansion}
               >
                 <div
-                  className={`cursor-pointer ${styles.hamburger} ${isNavbarExpanded ? styles.open : ""
-                    }`}
+                  className={`cursor-pointer ${styles.hamburger} ${
+                    isNavbarExpanded ? styles.open : ""
+                  }`}
                 >
                   <div className={`cursor-pointer ${styles.bars}`}>
                     <div className={`${styles.bar}`}></div>

@@ -42,7 +42,7 @@ const Landing = () => {
             <picture className="vv-picture style-vIhjt" id="style-vIhjt">
               <img
                 src="/images/front.png "
-                alt="Section Image"
+                alt="Section icon"
                 className="vv-asset vv-image style-RCXyf"
                 id="style-RCXyf"
                 style={{ width: "100%" }}

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const registeredUserInitialState = { user: {} };
+const registeredUserInitialState = { user: {}, isLoggedIn: false };
 
 export const registerUserSlice = createSlice({
   name: "registeredUserSlice",
@@ -8,9 +8,11 @@ export const registerUserSlice = createSlice({
   reducers: {
     addUser(state, action) {
       state.user = action.payload;
+      state.isLoggedIn = true;
     },
     removeUser(state, action) {
       state.user = {};
+      state.isLoggedIn = false;
     },
   },
 });
